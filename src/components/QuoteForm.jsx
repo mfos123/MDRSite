@@ -2,7 +2,7 @@ import { useState } from 'react';
 import emailjs from '@emailjs/browser';
 
 // Initialize EmailJS - replace with your public key from emailjs.com
-emailjs.init('YOUR_PUBLIC_KEY_HERE');
+emailjs.init('6YuVvjSINhp9rY-73');
 
 const initialState = {
   name: '',
@@ -44,7 +44,7 @@ export default function QuoteForm() {
 
     setSending(true);
     try {
-      await emailjs.send('YOUR_SERVICE_ID_HERE', 'YOUR_TEMPLATE_ID_HERE', {
+      await emailjs.send('service_zv7pzf4', 'service_zv7pzf4', {
         to_email: 'hello@marinadelreywindows.com',
         from_name: formState.name,
         from_email: formState.email,
