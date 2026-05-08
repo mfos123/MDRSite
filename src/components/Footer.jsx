@@ -20,9 +20,9 @@ export default function Footer() {
           <div>
             <p className="text-sm uppercase tracking-[0.32em] text-water-blue">Contact</p>
             <div className="mt-6 space-y-3 text-slate-600">
-              <p>Office: Marina del Rey, CA</p>
-              <p>Email: hello@mdrwindows.com</p>
-              <p>Phone: (310) 555-0198</p>
+              <p>Marina del Rey, CA</p>
+              <p>Email: marinareywindows@gmail.com</p>
+              <p>Phone: (718) 912 6170</p>
             </div>
             <div className="mt-8 flex gap-4 text-slate-600">
               <a href="#" className="transition hover:text-water-blue">Instagram</a>
