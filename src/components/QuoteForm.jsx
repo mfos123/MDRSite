@@ -1,4 +1,8 @@
 import { useState } from 'react';
+import emailjs from '@emailjs/browser';
+
+// Initialize EmailJS - replace with your public key from emailjs.com
+emailjs.init('YOUR_PUBLIC_KEY_HERE');
 
 const initialState = {
   name: '',
@@ -13,6 +17,7 @@ export default function QuoteForm() {
   const [formState, setFormState] = useState(initialState);
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
 
   const handleChange = (field) => (event) => {
     setFormState({ ...formState, [field]: event.target.value });
@@ -29,15 +34,33 @@ export default function QuoteForm() {
     return next;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const nextErrors = validate();
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) {
       return;
     }
-    setSubmitted(true);
-    setFormState(initialState);
+
+    setSending(true);
+    try {
+      await emailjs.send('YOUR_SERVICE_ID_HERE', 'YOUR_TEMPLATE_ID_HERE', {
+        to_email: 'hello@marinadelreywindows.com',
+        from_name: formState.name,
+        from_email: formState.email,
+        phone: formState.phone,
+        property: formState.property,
+        windows: formState.windows,
+        message: formState.message,
+      });
+      setSubmitted(true);
+      setFormState(initialState);
+    } catch (error) {
+      console.error('Email send failed:', error);
+      setErrors({ submit: 'Failed to send quote request. Please try again.' });
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -100,11 +123,16 @@ export default function QuoteForm() {
               placeholder="Message"
             />
           </label>
-          <button className="button-glass w-full justify-center bg-water-blue text-slate-950 shadow-sm transition hover:bg-water-blue/90 hover:text-slate-950" type="submit">
-            Send Request
+          <button className="button-glass w-full justify-center bg-water-blue text-slate-950 shadow-sm transition hover:bg-water-blue/90 hover:text-slate-950 disabled:opacity-50" type="submit" disabled={sending}>
+            {sending ? 'Sending...' : 'Send Request'}
           </button>
+          {errors.submit && (
+            <p className="rounded-3xl bg-rose-500/10 px-5 py-4 text-sm text-rose-600">
+              {errors.submit}
+            </p>
+          )}
           {submitted && (
-            <p className="rounded-3xl bg-emerald-500/10 px-5 py-4 text-sm text-emerald-200">
+            <p className="rounded-3xl bg-emerald-500/10 px-5 py-4 text-sm text-emerald-600">
               Thanks! Your request has been received. We will follow up shortly.
             </p>
           )}
